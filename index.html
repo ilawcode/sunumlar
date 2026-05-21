@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turkcell AI Destekli Analiz ve Geliştirme Sunumu</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter as high-quality sans-serif alternative to Helvetica Neue/Calibri -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Calibri', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .slide-shadow {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    /* Brand gradient backgrounds */
+    .bg-turkcell-radial {
+      background: radial-gradient(circle at center, #011BF6 0%, #08164E 70%, #09155D 100%);
+    }
+    .bg-brand-gray {
+      background-color: #F4F5F8;
+    }
+    .text-turkcell-navy {
+      color: #001480;
+    }
+    .bg-turkcell-navy {
+      background-color: #001480;
+    }
+    .bg-turkcell-yellow {
+      background-color: #FFC000;
+    }
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FFC000;
+    }
+
+    /* Native Fullscreen Styles - Optimized for High-Res Displays */
+    #presentationStage:fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 3rem !important;
+      background-color: #020617 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    #presentationStage:-webkit-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 3rem !important;
+      background-color: #020617 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    #presentationStage:-moz-full-screen {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 3rem !important;
+      background-color: #020617 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    #presentationStage:-ms-fullscreen {
+      width: 100vw !important;
+      height: 100vh !important;
+      padding: 3rem !important;
+      background-color: #020617 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    /* Unlocking width limitations inside Fullscreen modes */
+    #presentationStage:fullscreen #slideContainer,
+    #presentationStage:-webkit-full-screen #slideContainer,
+    #presentationStage:-moz-full-screen #slideContainer,
+    #presentationStage:-ms-fullscreen #slideContainer,
+    .virtual-fullscreen #slideContainer {
+      max-width: none !important;
+      max-height: none !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Virtual Fullscreen Fallback for Iframe Sandboxes */
+    .virtual-fullscreen {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background-color: #020617 !important;
+      z-index: 99999 !important;
+      padding: 3rem !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- Main App Shell -->
+  <div class="min-h-screen flex flex-col">
+    
+    <!-- Top Bar -->
+    <header class="bg-[#08164E] border-b border-[#001480]/30 px-6 py-4 flex items-center justify-between shadow-lg">
+      <div class="flex items-center gap-4">
+        <!-- Turkcell SVG Logo -->
+        <div class="flex items-center gap-3">
+          <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="50" fill="#FFC000"/>
+            <path d="M28 80C34 54 55 42 74 42" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="74" cy="42" r="8" fill="#001480"/>
+            <path d="M42 90C48 70 70 60 88 60" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="88" cy="60" r="8" fill="#001480"/>
+          </svg>
+          <div>
+            <span class="text-xs text-[#FFC000] font-bold tracking-widest block uppercase">Turkcell SQUAD Raporu</span>
+            <h1 class="text-base font-extrabold text-white tracking-tight">AI DESTEKLİ GELİŞTİRME ANALİZİ</h1>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Center Controls / Mode Switcher -->
+      <div class="flex bg-slate-900/80 rounded-full p-1 border border-slate-700/50">
+        <button onclick="setViewMode('present')" id="btn-present" class="px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all text-white bg-[#001480]">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4"></path></svg>
+          Sunum Modu
+        </button>
+        <button onclick="setViewMode('sorter')" id="btn-sorter" class="px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all text-slate-400 hover:text-white">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Slayt Düzeni (Sorter)
+        </button>
+        <button onclick="setViewMode('editor')" id="btn-editor" class="px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all text-slate-400 hover:text-white">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          Slayt Editörü
+        </button>
+      </div>
+
+      <!-- Right Side Actions -->
+      <div class="flex items-center gap-3">
+        <span class="text-xs px-2.5 py-1 rounded bg-[#09155D] text-slate-300 font-mono tracking-wider border border-[#001480]/40">TURKCELL GENEL</span>
+        <button onclick="resetToDefaultSlides()" class="p-2 hover:bg-slate-800 rounded-lg text-xs text-[#FFC000] border border-slate-700/50 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H18.5"></path></svg>
+          Sıfırla
+        </button>
+      </div>
+    </header>
+
+    <!-- Master Layout Split Content -->
+    <main class="flex-1 flex overflow-hidden">
+      
+      <!-- LEFT BAR: Navigation Thumbnails (Present Mode / Editor Mode) -->
+      <aside id="sidebar-navigator" class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col overflow-y-auto">
+        <div class="p-4 border-b border-slate-800">
+          <h3 class="text-xs uppercase font-extrabold text-slate-400 tracking-wider">SLAYT NAVİGASYONU</h3>
+        </div>
+        <div id="nav-slides-list" class="p-3 space-y-3">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </aside>
+
+      <!-- CENTER: Main 16:9 Presentation Stage -->
+      <section id="presentationStage" class="flex-1 bg-slate-950 p-6 flex flex-col items-center justify-center relative overflow-hidden">
+        
+        <!-- Widescreen Responsive Aspect Container -->
+        <div id="slideContainer" class="w-full h-full max-w-[1280px] max-h-[720px] aspect-[16/9] flex items-center justify-center relative">
+          
+          <!-- Scaled Slide Canvas -->
+          <div id="widescreenSlide" class="relative bg-white w-[1920px] h-[1080px] origin-center slide-shadow transition-all duration-300 overflow-hidden text-[#001480]">
+            <!-- Dynamic Slide Content Rendered Here -->
+          </div>
+
+        </div>
+
+        <!-- Float Nav Bar -->
+        <div class="mt-4 flex items-center gap-4 bg-slate-900/90 border border-slate-800 px-6 py-2.5 rounded-full z-10 shadow-2xl">
+          <button onclick="prevSlide()" class="p-2 bg-slate-800 hover:bg-[#FFC000] hover:text-[#001480] text-white rounded-full transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <span id="slide-index-indicator" class="text-sm font-semibold tracking-wider text-slate-300">1 / 14</span>
+          <button onclick="nextSlide()" class="p-2 bg-slate-800 hover:bg-[#FFC000] hover:text-[#001480] text-white rounded-full transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+          <div class="w-px h-5 bg-slate-700"></div>
+          <button onclick="toggleAutoPlay()" id="btn-play" class="p-2 hover:bg-slate-800 text-[#FFC000] rounded-full transition-all flex items-center gap-1 text-xs">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg> Autoplay
+          </button>
+          <button onclick="toggleFullscreen()" class="p-2 hover:bg-slate-800 text-slate-300 rounded-full transition-all" title="Tam Ekran">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"></path></svg>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- RIGHT BAR: Panel (Diagnostics Panel or Slide Editor depending on state) -->
+      <aside id="right-panel" class="w-80 bg-slate-900 border-l border-slate-800 flex flex-col overflow-y-auto">
+        
+        <!-- Tab buttons -->
+        <div class="flex border-b border-slate-800 text-xs font-semibold">
+          <button onclick="setRightTab('diagnostics')" id="tab-diagnostics" class="flex-1 py-3 text-center border-b-2 border-[#FFC000] text-white">
+            GÖRSEL TEŞHİS (REHBER)
+          </button>
+          <button onclick="setRightTab('editor')" id="tab-editor" class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 hover:text-white">
+            İÇERİK DÜZENLE
+          </button>
+        </div>
+
+        <!-- TAB CONTENT: Diagnostics Tool -->
+        <div id="panel-diagnostics" class="p-4 space-y-4">
+          <div class="bg-[#09155D]/50 border border-[#001480]/40 p-3 rounded-lg">
+            <h4 class="text-xs text-[#FFC000] font-bold uppercase mb-1">MARKA REHBERİ UYUMLULUĞU</h4>
+            <p class="text-[11px] text-slate-300">TURKCELL_SUNUM_FORMATI_09_24 standartları gereği bu slayt dinamik denetlenmektedir.</p>
+          </div>
+
+          <!-- Diagnostics Checks List -->
+          <div class="space-y-3">
+            <!-- Font Check -->
+            <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold text-slate-300">Yazı Karakteri Ailesi</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">Uyumlu</span>
+              </div>
+              <p class="text-xs text-slate-400">Aktif Font: <strong class="text-[#FFC000]">Calibri & Helvetica Neue</strong></p>
+            </div>
+
+            <!-- Bullet Word Count Metric -->
+            <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold text-slate-300">Madde Başına Kelime Limiti</span>
+                <span id="metric-word-status" class="text-[10px] px-2 py-0.5 rounded">Kontrol...</span>
+              </div>
+              <p class="text-xs text-slate-400">Rehber kuralı: Madde uzunluğu <strong class="text-white">≤ 12 kelime</strong> olmalıdır.</p>
+              <div class="mt-1.5 w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                <div id="metric-word-progress" class="bg-[#FFC000] h-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <!-- Bullet Count Metric -->
+            <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-semibold text-slate-300">Slayt Madde Yoğunluğu</span>
+                <span id="metric-bullet-status" class="text-[10px] px-2 py-0.5 rounded">Kontrol...</span>
+              </div>
+              <p class="text-xs text-slate-400">Rehber kuralı: En fazla <strong class="text-white">3 - 6 madde</strong> kullanılmalıdır.</p>
+            </div>
+
+            <!-- Lumos Motif Type -->
+            <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+              <span class="text-xs font-semibold text-slate-300 block mb-1">Aktif Lumos Grafik Öğesi</span>
+              <div class="flex items-center gap-2 mt-1">
+                <div id="lumos-accent-indicator" class="w-3 h-3 rounded-full bg-gradient-to-r from-[#FFC000] to-[#00C2FF]"></div>
+                <span id="lumos-type-text" class="text-xs font-mono text-[#FFC000]">-</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Lumos, Turkcell'in özgün taşıyıcı çizgisel/çerçeve formudur.</p>
+            </div>
+
+            <!-- Color Palette Guard -->
+            <div class="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
+              <span class="text-xs font-semibold text-slate-300 block mb-1">Kurumsal Slayt Renkleri</span>
+              <div class="flex gap-1.5 mt-2">
+                <span class="w-5 h-5 rounded-full border border-slate-600 bg-[#001480]" title="Navy"></span>
+                <span class="w-5 h-5 rounded-full border border-slate-600 bg-[#08164E]" title="Dark Navy"></span>
+                <span class="w-5 h-5 rounded-full border border-slate-600 bg-[#FFC000]" title="Yellow"></span>
+                <span class="w-5 h-5 rounded-full border border-slate-600 bg-[#00C2FF]" title="Turquoise"></span>
+                <span class="w-5 h-5 rounded-full border border-slate-600 bg-white" title="White"></span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-2">Klavuz Dışı (Örn: mor, yeşil vb.) renklerin kullanımı kesinlikle yasaktır.</p>
+            </div>
+          </div>
+
+          <!-- General Stats -->
+          <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-xs">
+            <span class="text-slate-400 font-bold uppercase tracking-wider block mb-2 text-[10px]">Toplam Verimlilik Özeti</span>
+            <div class="space-y-1 text-slate-300 font-mono">
+              <div class="flex justify-between">
+                <span>Geliştirme Tasarrufu:</span>
+                <span class="text-[#FFC000] font-bold">%28</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Kod Analiz Hızı:</span>
+                <span class="text-[#FFC000] font-bold">19 Kat</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Dokümantasyon Hızı:</span>
+                <span class="text-[#FFC000] font-bold">24 Kat</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT: Slide Editor -->
+        <div id="panel-editor" class="p-4 space-y-4 hidden">
+          <h3 class="text-sm font-bold text-slate-300 mb-2">Slayt Detaylarını Düzenle</h3>
+          
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Slayt Başlığı (Maks 8 Kelime)</label>
+              <input type="text" id="edit-title" oninput="updateCurrentSlideData()" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FFC000]">
+            </div>
+
+            <div>
+              <label class="block text-xs text-slate-400 mb-1">Slayt Sektör / Seperatör Alt Başlığı</label>
+              <input type="text" id="edit-subtitle" oninput="updateCurrentSlideData()" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FFC000]">
+            </div>
+
+            <div id="editor-bullets-container">
+              <label class="block text-xs text-slate-400 mb-1">Madde Noktaları (3 - 6 Satır)</label>
+              <textarea id="edit-bullets" rows="6" oninput="updateCurrentSlideData()" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-[#FFC000] font-mono" placeholder="Her satıra bir madde yazın"></textarea>
+            </div>
+
+            <div id="editor-image-option" class="hidden bg-slate-800/40 p-2.5 rounded border border-slate-700">
+              <span class="text-xs font-semibold text-[#FFC000]">Lumos Görsel Alan Seçenekleri</span>
+              <p class="text-[10px] text-slate-400 mt-1">Özel grafik/şema bu slaytta Lumos çerçevesinde gösterilir.</p>
+            </div>
+          </div>
+
+          <!-- Add/Delete Slides -->
+          <div class="pt-4 border-t border-slate-800 flex flex-col gap-2">
+            <button onclick="createNewSlide()" class="w-full py-2 bg-[#001480] hover:bg-[#001480]/80 text-white rounded text-xs font-bold transition-all">
+              Yeni Slayt Ekle
+            </button>
+            <button onclick="deleteCurrentSlide()" class="w-full py-2 bg-red-950/40 hover:bg-red-950 text-red-300 rounded text-xs font-bold transition-all border border-red-800/40">
+              Mevcut Slaytı Sil
+            </button>
+          </div>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- Slide Grid Sorter Mode (Hidden by Default) -->
+    <div id="sorter-view" class="fixed inset-0 bg-slate-950 z-50 overflow-y-auto p-8 hidden">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
+          <div>
+            <h2 class="text-2xl font-black text-white">Slayt Sorter Düzeni</h2>
+            <p class="text-sm text-slate-400">Tüm sunum sayfalarını genel çerçevede inceleyip düzenleyin.</p>
+          </div>
+          <button onclick="setViewMode('present')" class="px-5 py-2 bg-[#FFC000] hover:bg-[#FFC000]/80 text-[#001480] font-bold rounded-full text-xs transition-all">
+            Sunuma Geri Dön
+          </button>
+        </div>
+
+        <div id="sorter-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Floating Notifications toast -->
+    <div id="custom-toast" class="fixed bottom-6 right-6 px-4 py-2.5 bg-slate-800 text-xs font-bold text-[#FFC000] border border-[#FFC000] rounded-lg shadow-2xl transition-all duration-300 transform translate-y-24 opacity-0 z-[100]">
+      Notification content
+    </div>
+
+  </div>
+
+  <!-- PowerPoint and App logic Engine -->
+  <script>
+    // Turkcell Corporate Content Initial Store
+    const DEFAULT_SLIDES = [
+      {
+        id: "slide_1",
+        type: "cover",
+        title: "AI DESTEKLİ ANALİZ VE GELİŞTİRME SÜREÇLERİ",
+        subtitle: "SQUAD Gelişim ve Hız Analiz Raporu",
+        date: "21.05.2026",
+        bullets: []
+      },
+      {
+        id: "slide_2",
+        type: "separator",
+        title: "1. EKİP YAPISI",
+        subtitle: "SQUAD Yapı Taşları ve Çalışma Modelimiz",
+        date: "21.05.2026",
+        bullets: []
+      },
+      {
+        id: "slide_3",
+        type: "content",
+        lumos: "left-vertical",
+        title: "SQUAD Yapımız",
+        subtitle: "Ekip Yapısı ve Çalışma Modeli",
+        date: "21.05.2026",
+        bullets: [
+          "SQUAD kadromuzda: 1 PO, 1 DEL ve 5 Developer yer almaktadır.",
+          "Bu iş özelinde geliştirme tarafında ağırlıklı olarak tek developer çalıştı.",
+          "Bu nedenle analiz ve geliştirme süreçlerinde elde edilen hız kazanımı, toplam iş teslim süresine doğrudan etki etti."
+        ]
+      },
+      {
+        id: "slide_4",
+        type: "separator",
+        title: "2. ANALİZ SÜREÇLERİ",
+        subtitle: "Yapay Zeka Destekli Teknik Akış Analizleri",
+        date: "21.05.2026",
+        bullets: []
+      },
+      {
+        id: "slide_5",
+        type: "bullets-photo",
+        title: "Özel Şifre Yetkilisi Akış Analizi",
+        subtitle: "2.1. Özel Şifre Yetkilisi Akış Analizi",
+        date: "21.05.2026",
+        bullets: [
+          "Turkcell Online üzerinde Özel Şifre Yetkilisi tanımlandığında, akışın imza sirküleri yetkilisine gönderildiği sürecin teknik analizi çıkarıldı.",
+          "Bu analiz kapsamında: Ekranlarda çalışan 2 API ve arkada çalışan 2 altyapı servisi tespit edilip dokümante edildi.",
+          "Normalde bu seviyedeki analiz dokümantasyonunun manuel hazırlanması yaklaşık 2 gün sürecekken, önceden hazırlanan Markdown içerik ve AI desteği ile çalışma yaklaşık 2 saatte tamamlandı."
+        ],
+        metric: {
+          label: "Analiz Süresi",
+          before: "2 Gün",
+          after: "2 Saat",
+          ratio: "24 Kat Hız"
+        }
+      },
+      {
+        id: "slide_6",
+        type: "bullets-photo",
+        title: "Kısıtlı Yetkili Ekleme Akış Analizi",
+        subtitle: "2.2. Kısıtlı Yetkili Ekleme Akış Analizi",
+        date: "21.05.2026",
+        bullets: [
+          "Bu analiz doğrudan Cursor ile mevcut kod üzerinden çıkarıldı.",
+          "Geliştirmeye başlamadan önce akışın teknik çerçevesini doğrudan kod üzerinden çıkarmak hedeflendi.",
+          "Analiz sırasında: Hangi CRM servislerinin çağrılacağı, çağrım sırasındaki parametreler, gerekli API yapıları, doğrulama kuralları ve kayıt süreci akışı netleştirildi.",
+          "Normalde AI kullanılmadan yaklaşık 8 saat sürecek bir analiz çalışması, AI desteği ile yaklaşık 25 dakikada tamamlandı."
+        ],
+        metric: {
+          label: "Kod Tabanlı Analiz",
+          before: "8 Saat",
+          after: "25 Dak",
+          ratio: "19 Kat Hız"
+        }
+      },
+      {
+        id: "slide_7",
+        type: "content",
+        lumos: "horizontal-under",
+        title: "Login Etki Analizi",
+        subtitle: "2.3. Login Etki Analizi",
+        date: "21.05.2026",
+        bullets: [
+          "Login süreçlerinde, onaysız ÖŞY kullanıcılarının login olmaması için etki analizi çıkarıldı.",
+          "Bu başlıkta AI aktif olarak kullanıldı; analiz sürecinde karmaşık login akışının çıkarılmasında AI desteğinden faydalanıldı.",
+          "Yapay zeka desteği ile normal şartlarda 2 gün sürecek etki analizi çalışması 6 saatte tespit edilebild."
+        ]
+      },
+      {
+        id: "slide_8",
+        type: "separator",
+        title: "3. DEV SÜREÇLERİ",
+        subtitle: "Yapay Zeka Destekli Geliştirme ve Test Süreçleri",
+        date: "21.05.2026",
+        bullets: []
+      },
+      {
+        id: "slide_9",
+        type: "bullets-photo",
+        title: "Yapay Zeka Kullandığımız Alanlar",
+        subtitle: "3.1. Yapay Zeka Kullandığımız Alanlar",
+        date: "21.05.2026",
+        bullets: [
+          "Analiz çıktılarının geliştirme işine dönüştürülmesi, dev süreçlerinin planlanması ve mevcut teknik akışın daha hızlı netleştirilmesi adımlarında AI kullanıldı.",
+          "Özellikle birim (unit) testlerin tamamı yapay zeka araçları ile yazdırıldı.",
+          "Bu kullanım sayesinde toplam geliştirme eforu 7 günden 5 güne indirildi.",
+          "Geleneksel yöntemle yaklaşık 8 saat sürecek unit test yazımı ise sadece 1.5 saate düşürüldü."
+        ],
+        metric: {
+          label: "Unit Test Eforu",
+          before: "8 Saat",
+          after: "1.5 Saat",
+          ratio: "%81 Tasarruf"
+        }
+      },
+      {
+        id: "slide_10",
+        type: "content",
+        lumos: "quarter-circle",
+        title: "Yapay Zeka Sınırlı Kaldığımız Alanlar",
+        subtitle: "3.2. Yapay Zeka Kullanamadığımız / Sınırlı Kaldığımız Alanlar",
+        date: "21.05.2026",
+        bullets: [
+          "Bu çalışmada AI’den yüksek oranda fayda alınsa da, kullanım tam verimli seviyeye çıkamadı.",
+          "Bunun temel nedeni: Daha çok prompt bazlı ilerlenmesi ve henüz skill üretme / agent mantığında bir yapıya geçilmemiş olmasıdır.",
+          "Bu nedenle AI kullanımı destekleyici seviyede kaldı, tam anlamıyla akışa gömülü ve sistematik bir kullanım olmadı."
+        ]
+      },
+      {
+        id: "slide_11",
+        type: "content",
+        lumos: "left-vertical",
+        title: "Login Akışı Kod Düzenlemeleri",
+        subtitle: "3.2.1 Yapay Zeka Kullanamadığımız / Sınırlı Kaldığımız Alanlar",
+        date: "21.05.2026",
+        bullets: [
+          "ÖŞY login akışında kod düzenlemelerinde AI kullanamadık.",
+          "Karmaşık login akışı, yetki seviyesi ve hat tipi kontrollerinin ele alınması manuel ilerletildi.",
+          "Mobil ve web için ayrışan login akışları, hata ayrıştırma, raporlama ve log ekleme gibi daha kontrollü ele alınması gereken adımlarda insan kontrolü ve teknik değerlendirme daha baskın ilerledi."
+        ]
+      },
+      {
+        id: "slide_12",
+        type: "separator",
+        title: "4. RAPOR VE KISA SONUÇ",
+        subtitle: "SQUAD Kazanımları Genel Değerlendirmesi",
+        date: "21.05.2026",
+        bullets: []
+      },
+      {
+        id: "slide_13",
+        type: "content",
+        lumos: "horizontal-under",
+        title: "Kısa Sonuç Raporu",
+        subtitle: "Genel Değerlendirme",
+        date: "21.05.2026",
+        bullets: [
+          "2 API ve 2 altyapı servisi içeren akış analizi çıkarıldı. Kısıtlı yetkili ekleme akışı doğrudan kod üzerinden analiz edildi. Create API, adaptör upsert yapıları ve MERNİS entegrasyonu netleştirildi.",
+          "CRM servis çağrıları, parametreler, doğrulama kuralları ve kayıt akışı belirlendi.",
+          "Manuelde 2 gün sürecek analiz dokümantasyonu yaklaşık 2 saatte tamamlandı. AI kullanılmadan 8 saat sürecek kod bazlı analiz 25 dakikada çıkarıldı. Geliştirme eforu 7 günden 5 güne indirildi. 8 saatlik unit test yazımı 1.5 saate düşürüldü.",
+          "Bu çalışma, AI'nin özellikle analiz, teknik hazırlık ve unit test üretimi tarafında somut hız kazancı sağladığını gösterdi. Bununla birlikte, prompt bazlı kullanım yerine skill/agent mantığına geçilmesi durumunda daha yüksek verim alınabileceği de net şekilde görüldü."
+        ]
+      },
+      {
+        id: "slide_14",
+        type: "chart",
+        title: "Süreç Kazanımları Karşılaştırma Grafiği",
+        subtitle: "Süreç Başına Bireysel Ölçeklendirme",
+        date: "21.05.2026",
+        bullets: [],
+        chartData: [
+          { name: "ÖŞY Akış Analizi", before: 48, after: 2, labelBefore: "2 Gün (48s)", labelAfter: "2 Saat" },
+          { name: "Kısıtlı Yetkili Akışı", before: 8, after: 0.41, labelBefore: "8 Saat (480d)", labelAfter: "25 Dak" },
+          { name: "Login Etki Analizi", before: 48, after: 6, labelBefore: "2 Gün (48s)", labelAfter: "6 Saat" },
+          { name: "Geliştirme Eforu", before: 168, after: 120, labelBefore: "7 Gün (168s)", labelAfter: "5 Gün (120s)" },
+          { name: "Unit Test Yazımı", before: 8, after: 1.5, labelBefore: "8 Saat", labelAfter: "1.5 Saat" }
+        ]
+      },
+      {
+        id: "slide_15",
+        type: "cover",
+        title: "TEŞEKKÜRLER",
+        subtitle: "Sorularınız & Geri Bildirimleriniz İçin",
+        date: "21.05.2026",
+        bullets: []
+      }
+    ];
+
+    let slides = JSON.parse(localStorage.getItem('turkcell_slides')) || JSON.parse(JSON.stringify(DEFAULT_SLIDES));
+    let currentSlideIndex = 0;
+    let viewMode = 'present'; // 'present', 'sorter', 'editor'
+    let rightTab = 'diagnostics'; // 'diagnostics', 'editor'
+    let autoPlayInterval = null;
+    let isVirtualFullscreen = false; // Tracks custom fallback fullscreen state
+
+    // Initialize Page load
+    window.onload = function() {
+      renderSlideList();
+      renderCurrentSlide();
+      setupWidescreenScaling();
+      runDiagnostics();
+      
+      // Auto-fit widescreen aspect on window resize
+      window.addEventListener('resize', setupWidescreenScaling);
+
+      // Keyboard Controls
+      document.addEventListener('keydown', function(e) {
+        if (viewMode === 'present') {
+          if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'Enter') {
+            nextSlide();
+          } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+          }
+        }
+        // Listen for Esc in virtual fullscreen mode to clean up classes
+        if (e.key === 'Escape' && isVirtualFullscreen) {
+          exitVirtualFullscreen();
+        }
+      });
+
+      // Bind proper resize recalculations during Native Screen changes
+      document.addEventListener('fullscreenchange', setupWidescreenScaling);
+      document.addEventListener('webkitfullscreenchange', setupWidescreenScaling);
+      document.addEventListener('mozfullscreenchange', setupWidescreenScaling);
+      document.addEventListener('MSFullscreenChange', setupWidescreenScaling);
+    };
+
+    // Save slides to local storage
+    function saveSlides() {
+      localStorage.setItem('turkcell_slides', JSON.stringify(slides));
+    }
+
+    // Reset back to system default content
+    function resetToDefaultSlides() {
+      slides = JSON.parse(JSON.stringify(DEFAULT_SLIDES));
+      currentSlideIndex = 0;
+      saveSlides();
+      renderSlideList();
+      renderCurrentSlide();
+      showToast("Sunum varsayılan ayarlara sıfırlandı!");
+    }
+
+    // Handle scale dynamic logic for 16:9 box
+    function setupWidescreenScaling() {
+      const container = document.getElementById('slideContainer');
+      const slide = document.getElementById('widescreenSlide');
+      if (!container || !slide) return;
+
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+
+      const baseWidth = 1920;
+      const baseHeight = 1080;
+
+      // Calculate perfect scale factor
+      const scaleX = containerWidth / baseWidth;
+      const scaleY = containerHeight / baseHeight;
+      const scale = Math.min(scaleX, scaleY);
+
+      // Apply style transform matrix
+      slide.style.transform = `scale(${scale})`;
+      slide.style.width = `${baseWidth}px`;
+      slide.style.height = `${baseHeight}px`;
+    }
+
+    // Tab switcher in right bar
+    function setRightTab(tab) {
+      rightTab = tab;
+      document.getElementById('tab-diagnostics').className = `flex-1 py-3 text-center border-b-2 text-xs font-semibold ${tab === 'diagnostics' ? 'border-[#FFC000] text-white' : 'border-transparent text-slate-400'}`;
+      document.getElementById('tab-editor').className = `flex-1 py-3 text-center border-b-2 text-xs font-semibold ${tab === 'editor' ? 'border-[#FFC000] text-white' : 'border-transparent text-slate-400'}`;
+
+      if (tab === 'diagnostics') {
+        document.getElementById('panel-diagnostics').classList.remove('hidden');
+        document.getElementById('panel-editor').classList.add('hidden');
+      } else {
+        document.getElementById('panel-diagnostics').classList.add('hidden');
+        document.getElementById('panel-editor').classList.remove('hidden');
+        populateEditorFields();
+      }
+    }
+
+    // Mode Switcher view modes
+    function setViewMode(mode) {
+      viewMode = mode;
+      document.getElementById('btn-present').className = `px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${mode === 'present' ? 'text-white bg-[#001480]' : 'text-slate-400 hover:text-white'}`;
+      document.getElementById('btn-sorter').className = `px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${mode === 'sorter' ? 'text-white bg-[#001480]' : 'text-slate-400 hover:text-white'}`;
+      document.getElementById('btn-editor').className = `px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all ${mode === 'editor' ? 'text-white bg-[#001480]' : 'text-slate-400 hover:text-white'}`;
+
+      const sorterView = document.getElementById('sorter-view');
+      const sidebarNav = document.getElementById('sidebar-navigator');
+
+      if (mode === 'sorter') {
+        sorterView.classList.remove('hidden');
+        renderSorterGrid();
+      } else {
+        sorterView.classList.add('hidden');
+      }
+
+      if (mode === 'editor') {
+        sidebarNav.classList.remove('hidden');
+        setRightTab('editor');
+      } else if (mode === 'present') {
+        sidebarNav.classList.remove('hidden');
+        setRightTab('diagnostics');
+      }
+
+      // Re-fit canvas layout
+      setTimeout(setupWidescreenScaling, 50);
+    }
+
+    // Populate thumbnails in left bar
+    function renderSlideList() {
+      const navContainer = document.getElementById('nav-slides-list');
+      navContainer.innerHTML = '';
+
+      slides.forEach((slide, index) => {
+        const item = document.createElement('div');
+        item.className = `p-2 rounded-lg cursor-pointer transition-all border ${index === currentSlideIndex ? 'bg-[#001480]/20 border-[#FFC000] text-[#FFC000]' : 'bg-slate-800/40 border-slate-700/50 text-slate-300'} hover:border-[#FFC000]/60`;
+        item.onclick = () => selectSlide(index);
+
+        let typeBadge = '';
+        if (slide.type === 'cover') typeBadge = 'Kapak';
+        else if (slide.type === 'separator') typeBadge = 'Seperatör';
+        else if (slide.type === 'content') typeBadge = 'İçerik';
+        else if (slide.type === 'bullets-photo') typeBadge = 'Karşılaştırma';
+        else if (slide.type === 'chart') typeBadge = 'Grafik';
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase font-bold text-slate-400">${index + 1}. Slayt</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-900 text-[#FFC000] border border-slate-700 font-mono">${typeBadge}</span>
+          </div>
+          <h4 class="text-xs font-semibold mt-1 truncate">${slide.title || 'Başlıksız Slayt'}</h4>
+        `;
+        navContainer.appendChild(item);
+      });
+
+      document.getElementById('slide-index-indicator').innerText = `${currentSlideIndex + 1} / ${slides.length}`;
+    }
+
+    // Render Sorter View Grid
+    function renderSorterGrid() {
+      const grid = document.getElementById('sorter-grid');
+      grid.innerHTML = '';
+
+      slides.forEach((slide, index) => {
+        const card = document.createElement('div');
+        card.className = `bg-slate-900 border ${index === currentSlideIndex ? 'border-[#FFC000]' : 'border-slate-800'} rounded-xl p-4 cursor-pointer hover:border-[#FFC000]/60 transition-all flex flex-col justify-between`;
+        card.onclick = () => {
+          selectSlide(index);
+          setViewMode('present');
+        };
+
+        let bulletsHtml = '';
+        if (slide.bullets && slide.bullets.length > 0) {
+          bulletsHtml = `<ul class="space-y-1 text-[10px] text-slate-400 list-disc list-inside">
+            ${slide.bullets.slice(0, 3).map(b => `<li class="truncate">${b}</li>`).join('')}
+          </ul>`;
+        }
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono text-slate-500">${index + 1}. Slayt</span>
+              <span class="text-xs px-2 py-0.5 bg-slate-800 text-[#FFC000] rounded uppercase font-bold text-[10px]">${slide.type}</span>
+            </div>
+            <h3 class="text-sm font-bold text-white mb-2 line-clamp-2">${slide.title}</h3>
+            ${bulletsHtml}
+          </div>
+          <div class="mt-4 pt-2 border-t border-slate-800/80 flex justify-between items-center text-[10px] text-slate-500">
+            <span>Yayınlayan: Turkcell SQUAD</span>
+            <span>2026</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Select Slide
+    function selectSlide(index) {
+      if (index >= 0 && index < slides.length) {
+        currentSlideIndex = index;
+        renderSlideList();
+        renderCurrentSlide();
+        runDiagnostics();
+        if (rightTab === 'editor') {
+          populateEditorFields();
+        }
+      }
+    }
+
+    // Prev / Next functions with circular wrapping
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        selectSlide(currentSlideIndex - 1);
+      } else {
+        selectSlide(slides.length - 1);
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < slides.length - 1) {
+        selectSlide(currentSlideIndex + 1);
+      } else {
+        selectSlide(0);
+      }
+    }
+
+    // Autoplay Controller
+    function toggleAutoPlay() {
+      const btn = document.getElementById('btn-play');
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+        btn.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg> Autoplay`;
+        btn.classList.remove('bg-[#FFC000]/20');
+        showToast("Otomatik oynatma durduruldu.");
+      } else {
+        autoPlayInterval = setInterval(nextSlide, 5000);
+        btn.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg> Pause`;
+        btn.classList.add('bg-[#FFC000]/20');
+        showToast("Otomatik oynatma başlatıldı (5 saniye).");
+      }
+    }
+
+    // Dual-Mode Fullscreen System (Standard HTML5 + Virtual Fallback for Restricted Iframes)
+    function toggleFullscreen() {
+      const stage = document.getElementById('presentationStage');
+      
+      const isNativeFullscreen = document.fullscreenElement || 
+                                 document.webkitFullscreenElement || 
+                                 document.mozFullScreenElement || 
+                                 document.msFullscreenElement;
+
+      if (isNativeFullscreen || isVirtualFullscreen) {
+        // Exit active fullscreen
+        if (isNativeFullscreen) {
+          if (document.exitFullscreen) {
+            document.exitFullscreen().catch(() => {});
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        } else {
+          exitVirtualFullscreen();
+        }
+      } else {
+        // Enter fullscreen, targeting presentation stage to preserve float navigation
+        const requestFS = stage.requestFullscreen || 
+                          stage.webkitRequestFullscreen || 
+                          stage.mozRequestFullScreen || 
+                          stage.msRequestFullscreen;
+
+        if (requestFS) {
+          requestFS.call(stage)
+            .then(() => {
+              showToast("Tam ekran modu aktif.");
+              setTimeout(setupWidescreenScaling, 150);
+            })
+            .catch((err) => {
+              // Standard failed due to iframe constraints, activate virtual fullscreen
+              enterVirtualFullscreen(stage);
+            });
+        } else {
+          // Direct virtual fallback
+          enterVirtualFullscreen(stage);
+        }
+      }
+    }
+
+    // Handle Sandboxed Virtual Fullscreen Fallback
+    function enterVirtualFullscreen(stage) {
+      stage.classList.add('virtual-fullscreen');
+      isVirtualFullscreen = true;
+      setupWidescreenScaling();
+      showToast("Tam ekran modu aktif (Gömülü). Çıkmak için ESC veya butona tıklayabilirsiniz.");
+    }
+
+    function exitVirtualFullscreen() {
+      const stage = document.getElementById('presentationStage');
+      stage.classList.remove('virtual-fullscreen');
+      isVirtualFullscreen = false;
+      setupWidescreenScaling();
+      showToast("Tam ekrandan çıkıldı.");
+    }
+
+    // Toast Notification alert
+    function showToast(message) {
+      const toast = document.getElementById('custom-toast');
+      toast.innerText = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    // MAIN RENDER ENGINE FOR THE WIDESCREEN SLIDE CANVAS
+    function renderCurrentSlide() {
+      const canvas = document.getElementById('widescreenSlide');
+      const slide = slides[currentSlideIndex];
+      if (!canvas || !slide) return;
+
+      canvas.className = "relative w-[1920px] h-[1080px] transition-all duration-300 overflow-hidden";
+
+      let innerHtml = '';
+
+      if (slide.type === 'cover') {
+        // Cover Slide: Premium Turkcell Radial Gradient Background with Circular Lumos Ring and Turkcell Logo
+        canvas.classList.add('bg-turkcell-radial');
+        innerHtml = `
+          <!-- Confidentiality Label -->
+          <div class="absolute top-10 right-12 text-slate-300 text-sm font-bold font-mono tracking-wider">TURKCELL GENEL</div>
+          
+          <!-- Large Lumos Circular Arc Background Light -->
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-dashed border-[#00C2FF]/25 rounded-full animate-spin-slow pointer-events-none"></div>
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] border-t-2 border-r-2 border-[#FFC000]/30 rounded-full pointer-events-none"></div>
+
+          <!-- Logo -->
+          <div class="absolute top-16 left-20 flex items-center gap-4">
+            <svg class="w-16 h-16" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="50" fill="#FFC000"/>
+              <path d="M28 80C34 54 55 42 74 42" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="74" cy="42" r="8" fill="#001480"/>
+              <path d="M42 90C48 70 70 60 88 60" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="88" cy="60" r="8" fill="#001480"/>
+            </svg>
+            <span class="text-white text-xl font-black tracking-widest font-mono">TURKCELL</span>
+          </div>
+
+          <!-- Slide Content Container -->
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-40">
+            <div class="mb-6 flex items-center gap-2">
+              <span class="h-1.5 w-12 bg-[#FFC000] rounded-full"></span>
+              <span class="text-[#FFC000] text-lg font-bold uppercase tracking-[0.25em]">KURUMSAL RAPOR</span>
+              <span class="h-1.5 w-12 bg-[#FFC000] rounded-full"></span>
+            </div>
+            <h1 class="text-white text-6xl font-extrabold tracking-tight mb-8 leading-tight uppercase font-sans">${slide.title}</h1>
+            <p class="text-[#1DB4FF] text-2xl font-medium tracking-wide max-w-4xl">${slide.subtitle}</p>
+          </div>
+
+          <!-- Footer Band -->
+          <div class="absolute bottom-16 left-20 right-20 flex justify-between items-center text-slate-400 font-mono text-sm border-t border-slate-700/50 pt-6">
+            <span>T-Life Görsel Kimlik Rehberi v2026.1</span>
+            <span>Yayın Tarihi: ${slide.date || '21.05.2026'}</span>
+          </div>
+        `;
+      } 
+      else if (slide.type === 'separator') {
+        // Separator Slide: Dark Navy Accent Background with Yellow Section Ribbon
+        canvas.classList.add('bg-[#08164E]');
+        innerHtml = `
+          <!-- Confidentiality Label -->
+          <div class="absolute top-10 right-12 text-slate-300 text-sm font-bold font-mono tracking-wider">TURKCELL GENEL</div>
+
+          <!-- Background Decorative Brand Curves -->
+          <div class="absolute top-0 right-0 w-[500px] h-full bg-gradient-to-l from-[#001480]/20 to-transparent pointer-events-none"></div>
+
+          <!-- Section Content -->
+          <div class="absolute inset-0 flex flex-col justify-center px-32">
+            <!-- Brand yellow ribbon line (Lumos) -->
+            <div class="w-32 h-2.5 bg-gradient-to-r from-[#FFC000] to-[#00C2FF] rounded-full mb-8"></div>
+            
+            <span class="text-[#FFC000] text-2xl font-mono tracking-wider uppercase mb-3 block font-bold">${slide.subtitle || 'BÖLÜM'}</span>
+            <h2 class="text-white text-5xl font-black tracking-tight leading-tight max-w-5xl uppercase">${slide.title}</h2>
+          </div>
+
+          <!-- Logo positioned bottom right -->
+          <div class="absolute bottom-16 right-20 flex items-center gap-3">
+            <svg class="w-10 h-10" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="50" fill="#FFC000"/>
+              <path d="M28 80C34 54 55 42 74 42" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="74" cy="42" r="8" fill="#001480"/>
+              <path d="M42 90C48 70 70 60 88 60" stroke="#001480" stroke-width="8" stroke-linecap="round"/>
+              <circle cx="88" cy="60" r="8" fill="#001480"/>
+            </svg>
+            <span class="text-white font-mono font-bold tracking-wider text-sm">TURKCELL</span>
+          </div>
+
+          <div class="absolute bottom-16 left-32 text-slate-400 font-mono text-sm">
+            <span>Tarih: ${slide.date || '21.05.2026'}</span>
+          </div>
+        `;
+      } 
+      else if (slide.type === 'content') {
+        // Standard Content Slide: White background with Lumos vertical or horizontal accents
+        canvas.classList.add('bg-white');
+        
+        let lumosMarkup = '';
+        if (slide.lumos === 'left-vertical') {
+          // Vertical Lumos on the left of bullets
+          lumosMarkup = `<div class="absolute left-0 top-0 bottom-0 w-2.5 bg-gradient-to-b from-[#FFC000] via-[#00C2FF] to-[#001480] rounded-r-lg"></div>`;
+        } else if (slide.lumos === 'horizontal-under') {
+          // Under title lumos horizontal line
+          lumosMarkup = `<div class="h-1.5 w-48 bg-gradient-to-r from-[#FFC000] via-[#00C2FF] to-[#001480] rounded-full mt-4"></div>`;
+        } else if (slide.lumos === 'quarter-circle') {
+          // Bottom-left quarter circle Lumos accent
+          lumosMarkup = `
+            <svg class="absolute bottom-0 left-0 w-48 h-48 pointer-events-none text-slate-100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,100 A100,100 0 0,1 100,0" stroke="url(#lumosGrad)" stroke-width="2" fill="none" />
+              <defs>
+                <linearGradient id="lumosGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#FFC000" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#001480" stop-opacity="0.1"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          `;
+        }
+
+        const bulletsList = slide.bullets.map(b => `
+          <li class="flex items-start gap-4">
+            <!-- Beautiful thin corporate icon bullet -->
+            <span class="w-3.5 h-3.5 bg-[#FFC000] border-[3px] border-[#001480] rounded-full mt-2.5 flex-shrink-0"></span>
+            <span class="text-[#001480] text-[28px] font-medium leading-relaxed">${b}</span>
+          </li>
+        `).join('');
+
+        innerHtml = `
+          <!-- Slide Ribbon Top Brand Band -->
+          <div class="h-4 bg-gradient-to-r from-[#001480] via-[#00C2FF] to-[#FFC000]"></div>
+
+          <!-- Confidentiality Label -->
+          <div class="absolute top-10 right-12 text-slate-500 text-sm font-bold font-mono tracking-wider">TURKCELL GENEL</div>
+
+          <!-- Slide Title -->
+          <div class="px-24 pt-20">
+            <h2 class="text-[#001480] text-5xl font-black uppercase tracking-tight">${slide.title}</h2>
+            <div class="text-slate-400 text-lg font-mono uppercase mt-1 tracking-wider">${slide.subtitle}</div>
+            ${slide.lumos === 'horizontal-under' ? lumosMarkup : ''}
+          </div>
+
+          <!-- Main Body Canvas -->
+          <div class="px-24 pt-12 relative flex-1">
+            ${slide.lumos === 'left-vertical' ? '<div class="relative pl-8">' : '<div>'}
+              ${slide.lumos === 'left-vertical' ? lumosMarkup : ''}
+              <ul class="space-y-6 max-w-5xl">
+                ${bulletsList}
+              </ul>
+            </div>
+          </div>
+
+          ${slide.lumos === 'quarter-circle' ? lumosMarkup : ''}
+
+          <!-- Footer Metadata -->
+          <div class="absolute bottom-10 left-24 right-24 flex justify-between items-center text-slate-400 font-mono text-sm border-t border-slate-100 pt-4">
+            <span>Turkcell SQUAD Geliştirme Akışı</span>
+            <span>Sayfa Tarihi: ${slide.date || '21.05.2026'}</span>
+          </div>
+        `;
+      } 
+      else if (slide.type === 'bullets-photo') {
+        // Visual comparison slide - Split screen: Bullets left, Metric display right with Lumos frame
+        canvas.classList.add('bg-white');
+
+        const bulletsList = slide.bullets.map(b => `
+          <li class="flex items-start gap-3">
+            <span class="w-3 h-3 bg-[#FFC000] border-2 border-[#001480] rounded-full mt-2.5 flex-shrink-0"></span>
+            <span class="text-[#001480] text-[24px] font-medium leading-normal">${b}</span>
+          </li>
+        `).join('');
+
+        const m = slide.metric || { label: "Hız Artışı", before: "Eski", after: "Yeni", ratio: "Kazanım" };
+
+        innerHtml = `
+          <!-- Slide Ribbon Top Brand Band -->
+          <div class="h-4 bg-gradient-to-r from-[#001480] via-[#00C2FF] to-[#FFC000]"></div>
+
+          <!-- Confidentiality Label -->
+          <div class="absolute top-10 right-12 text-slate-500 text-sm font-bold font-mono tracking-wider">TURKCELL GENEL</div>
+
+          <!-- Slide Title -->
+          <div class="px-24 pt-20">
+            <h2 class="text-[#001480] text-5xl font-black uppercase tracking-tight">${slide.title}</h2>
+            <div class="text-slate-400 text-lg font-mono uppercase mt-1 tracking-wider">${slide.subtitle}</div>
+          </div>
+
+          <!-- Split Two Column Layout -->
+          <div class="px-24 pt-8 grid grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Side Bullet List -->
+            <div class="col-span-7">
+              <ul class="space-y-3.5">
+                ${bulletsList}
+              </ul>
+            </div>
+
+            <!-- Right Side Metric Container with Lumos Accent Frame -->
+            <div class="col-span-5 relative">
+              <div class="absolute -inset-1.5 bg-gradient-to-r from-[#FFC000] via-[#00C2FF] to-[#001480] rounded-2xl blur opacity-75 animate-pulse"></div>
+              
+              <div class="relative bg-slate-900 text-white rounded-xl p-8 shadow-2xl flex flex-col items-center justify-center border border-slate-700">
+                <span class="text-xs uppercase font-extrabold text-[#FFC000] tracking-[0.2em] mb-4">${m.label}</span>
+                
+                <div class="flex items-center gap-6 w-full justify-center">
+                  <div class="text-center flex-1">
+                    <div class="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-1">Yapay Zekasız</div>
+                    <div class="text-3xl font-mono text-slate-300 line-through decoration-red-500 decoration-4">${m.before}</div>
+                  </div>
+                  
+                  <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#001480]/80 text-[#FFC000]">
+                    <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                  </div>
+                  
+                  <div class="text-center flex-1">
+                    <div class="text-[#00C2FF] text-[11px] font-bold uppercase tracking-wider mb-1">Yapay Zekalı</div>
+                    <div class="text-4xl font-extrabold text-[#FFC000] tracking-tight font-mono">${m.after}</div>
+                  </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-800 w-full text-center">
+                  <div class="text-xs text-slate-400">Toplam Süreç İvmesi</div>
+                  <div class="text-5xl font-extrabold text-white tracking-tighter mt-1 font-mono">${m.ratio}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer Metadata -->
+          <div class="absolute bottom-10 left-24 right-24 flex justify-between items-center text-slate-400 font-mono text-sm border-t border-slate-100 pt-4">
+            <span>Ölçeklenebilir AI Destekli Dev Ölçümü</span>
+            <span>Sayfa Tarihi: ${slide.date || '21.05.2026'}</span>
+          </div>
+        `;
+      } 
+      else if (slide.type === 'chart') {
+        // Chart Slide: Visualizing Time Gains with INDIVIDUAL scaling per row to make small values clearly visible
+        canvas.classList.add('bg-white');
+
+        const chartItems = slide.chartData || [];
+
+        const chartLinesHtml = chartItems.map(item => {
+          // Dynamic calculation: baseline is always Before (100% width)
+          const beforeWidth = 100;
+          const afterWidth = item.before > 0 ? (item.after / item.before) * 100 : 0;
+          
+          // Calculate percentage saved dynamically
+          const savedPercentage = Math.round(((item.before - item.after) / item.before) * 100);
+
+          // Render label outside/inside depending on bar length
+          const labelClass = afterWidth < 18 ? 'text-[#001480] absolute left-full ml-3 font-extrabold' : 'text-[#001480]';
+
+          return `
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <div class="text-xl font-bold text-[#001480]">${item.name}</div>
+                <div class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">- %${savedPercentage} Zaman Tasarrufu</div>
+              </div>
+              
+              <div class="space-y-1.5">
+                <!-- Before Bar (Navy Blue - represents 100% baseline for this metric) -->
+                <div class="flex items-center gap-3">
+                  <div class="w-24 text-right text-xs text-slate-400 font-bold uppercase">Geleneksel</div>
+                  <div class="flex-1 bg-slate-100 h-6 rounded-full overflow-hidden">
+                    <div class="bg-[#001480] h-full rounded-full transition-all duration-1000 flex items-center px-3" style="width: ${beforeWidth}%">
+                      <span class="text-white text-[10px] font-bold font-mono whitespace-nowrap">${item.labelBefore}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- After Bar (Yellow - scaled proportionally to Before) -->
+                <div class="flex items-center gap-3">
+                  <div class="w-24 text-right text-xs text-[#00C2FF] font-bold uppercase font-mono">Cursor + AI</div>
+                  <div class="flex-1 bg-slate-100 h-6 rounded-full relative flex items-center">
+                    <div class="bg-[#FFC000] h-full rounded-full transition-all duration-1000 flex items-center px-3 relative" style="width: ${afterWidth}%">
+                      <span class="text-[10px] font-black font-mono whitespace-nowrap ${labelClass}">${item.labelAfter}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        innerHtml = `
+          <!-- Slide Ribbon Top Brand Band -->
+          <div class="h-4 bg-gradient-to-r from-[#001480] via-[#00C2FF] to-[#FFC000]"></div>
+
+          <!-- Confidentiality Label -->
+          <div class="absolute top-10 right-12 text-slate-500 text-sm font-bold font-mono tracking-wider">TURKCELL GENEL</div>
+
+          <!-- Slide Title -->
+          <div class="px-24 pt-20">
+            <h2 class="text-[#001480] text-5xl font-black uppercase tracking-tight">${slide.title}</h2>
+            <div class="text-slate-400 text-lg font-mono uppercase mt-1 tracking-wider">${slide.subtitle}</div>
+          </div>
+
+          <!-- Chart Body Container -->
+          <div class="px-24 pt-4 grid grid-cols-12 gap-12">
+            
+            <div class="col-span-8 space-y-3">
+              ${chartLinesHtml}
+            </div>
+
+            <!-- Legend Info / Lumos Quarter Circle Card -->
+            <div class="col-span-4 bg-[#F4F5F8] p-6 rounded-xl border border-slate-200/50 flex flex-col justify-between">
+              <div>
+                <span class="text-xs uppercase font-extrabold tracking-wider text-slate-500 block mb-3">RENK ANAHTARI</span>
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3">
+                    <span class="w-5 h-5 bg-[#001480] rounded-full"></span>
+                    <span class="text-xs font-bold text-[#001480]">Yapay Zekasız Süreç (Geleneksel)</span>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="w-5 h-5 bg-[#FFC000] rounded-full"></span>
+                    <span class="text-xs font-bold text-[#001480]">Yapay Zekalı Süreç (Cursor/AI)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-4 border-t border-slate-300/60 text-xs text-slate-500">
+                <span class="text-xs uppercase font-extrabold text-[#001480] block mb-1">MÜKEMMEL ROW ÖLÇEKLENDİRME</span>
+                <p class="leading-relaxed">Her kazanım satırı, kendi başlangıç süresi temelinde (%100) ayrı ayrı ölçeklenmiştir. Bu sayede 48 saatlik süreçle 8 saatlik sürecin arasındaki farklar birbirini ezmeden, hassas bir şekilde görselleştirilmiştir.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer Metadata -->
+          <div class="absolute bottom-10 left-24 right-24 flex justify-between items-center text-slate-400 font-mono text-sm border-t border-slate-100 pt-4">
+            <span>Verimlilik Karşılaştırmalı Zaman Matrisi</span>
+            <span>Sayfa Tarihi: ${slide.date || '21.05.2026'}</span>
+          </div>
+        `;
+      }
+
+      canvas.innerHTML = innerHtml;
+    }
+
+    // DIAGNOSTICS & ADAPTIVE COMPLIANCE ANALYZER
+    function runDiagnostics() {
+      const slide = slides[currentSlideIndex];
+      if (!slide) return;
+
+      // 1. Analyze Bullet Word Count Limit
+      const bullets = slide.bullets || [];
+      const tooLongBullets = bullets.filter(b => b.split(' ').length > 12);
+      
+      const wordStatus = document.getElementById('metric-word-status');
+      const wordProgress = document.getElementById('metric-word-progress');
+
+      if (bullets.length === 0) {
+        wordStatus.innerText = "Madde Yok";
+        wordStatus.className = "text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700";
+        wordProgress.style.width = "0%";
+      } else if (tooLongBullets.length > 0) {
+        wordStatus.innerText = "Aşım Var";
+        wordStatus.className = "text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800";
+        // Calculate percentage of bad bullets
+        const badPercent = (tooLongBullets.length / bullets.length) * 100;
+        wordProgress.style.width = `${badPercent}%`;
+        wordProgress.className = "bg-amber-500 h-full";
+      } else {
+        wordStatus.innerText = "Uyumlu";
+        wordStatus.className = "text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
+        wordProgress.style.width = "100%";
+        wordProgress.className = "bg-emerald-500 h-full";
+      }
+
+      // 2. Bullet Limit Density Analyzer
+      const bulletStatus = document.getElementById('metric-bullet-status');
+      if (bullets.length === 0) {
+        bulletStatus.innerText = "Slayt Yapısı Uyumlu";
+        bulletStatus.className = "text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
+      } else if (bullets.length >= 3 && bullets.length <= 6) {
+        bulletStatus.innerText = "Uyumlu (" + bullets.length + " Madde)";
+        bulletStatus.className = "text-[10px] px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800";
+      } else {
+        bulletStatus.innerText = "Yoğun (" + bullets.length + " Madde)";
+        bulletStatus.className = "text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800";
+      }
+
+      // 3. Current Lumos accent check
+      const lumosText = document.getElementById('lumos-type-text');
+      const lumosIndicator = document.getElementById('lumos-accent-indicator');
+
+      if (slide.type === 'cover') {
+        lumosText.innerText = "LUMOS RADIAL / DAİRESEL";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-r from-[#FFC000] to-[#011BF6]";
+      } else if (slide.type === 'separator') {
+        lumosText.innerText = "LUMOS SEPERATÖR BANDI";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-r from-[#FFC000] to-[#00C2FF]";
+      } else if (slide.type === 'bullets-photo') {
+        lumosText.innerText = "LUMOS ÇERÇEVE FORMU";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-r from-[#FFC000] via-[#00C2FF] to-[#001480]";
+      } else if (slide.lumos === 'left-vertical') {
+        lumosText.innerText = "LUMOS DİKEY ÇİZGİ";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-b from-[#FFC000] to-[#001480]";
+      } else if (slide.lumos === 'horizontal-under') {
+        lumosText.innerText = "LUMOS YATAY ÇİZGİ";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-r from-[#FFC000] to-[#001480]";
+      } else if (slide.lumos === 'quarter-circle') {
+        lumosText.innerText = "LUMOS ÇEYREK DAİRE";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-[#00C2FF]";
+      } else {
+        lumosText.innerText = "YATAY BANT GRADYANI";
+        lumosIndicator.className = "w-3 h-3 rounded-full bg-gradient-to-r from-[#001480] via-[#00C2FF] to-[#FFC000]";
+      }
+    }
+
+    // Populating Editor fields in Sidebar
+    function populateEditorFields() {
+      const slide = slides[currentSlideIndex];
+      if (!slide) return;
+
+      document.getElementById('edit-title').value = slide.title || '';
+      document.getElementById('edit-subtitle').value = slide.subtitle || '';
+
+      const bulletsArea = document.getElementById('edit-bullets');
+      const bulletContainer = document.getElementById('editor-bullets-container');
+      const imageOption = document.getElementById('editor-image-option');
+
+      if (slide.type === 'cover' || slide.type === 'separator') {
+        bulletContainer.classList.add('hidden');
+        imageOption.classList.add('hidden');
+      } else {
+        bulletContainer.classList.remove('hidden');
+        bulletsArea.value = (slide.bullets || []).join('\n');
+        
+        if (slide.type === 'bullets-photo') {
+          imageOption.classList.remove('hidden');
+        } else {
+          imageOption.classList.add('hidden');
+        }
+      }
+    }
+
+    // Live update slide while typing in Editor text box
+    function updateCurrentSlideData() {
+      const slide = slides[currentSlideIndex];
+      if (!slide) return;
+
+      slide.title = document.getElementById('edit-title').value;
+      slide.subtitle = document.getElementById('edit-subtitle').value;
+
+      if (slide.type !== 'cover' && slide.type !== 'separator') {
+        const text = document.getElementById('edit-bullets').value;
+        slide.bullets = text.split('\n').filter(line => line.trim() !== '');
+      }
+
+      // Re-render and save state
+      renderCurrentSlide();
+      saveSlides();
+      renderSlideList();
+      runDiagnostics();
+    }
+
+    // Create custom new slide
+    function createNewSlide() {
+      const id = "slide_" + Date.now();
+      const newSlide = {
+        id: id,
+        type: "content",
+        lumos: "left-vertical",
+        title: "YENİ SLAYT BAŞLIĞI",
+        subtitle: "Konu Detayı",
+        date: "21.05.2026",
+        bullets: [
+          "Yeni slayt maddesi bir.",
+          "Yeni slayt maddesi iki.",
+          "Maddeler kısa ve net olmalıdır."
+        ]
+      };
+
+      slides.push(newSlide);
+      saveSlides();
+      currentSlideIndex = slides.length - 1;
+      
+      renderSlideList();
+      renderCurrentSlide();
+      populateEditorFields();
+      runDiagnostics();
+      showToast("Yeni slayt başarıyla eklendi!");
+    }
+
+    // Delete current slide
+    function deleteCurrentSlide() {
+      if (slides.length <= 1) {
+        showToast("Hata: Sunumdaki tek kalan slaytı silemezsiniz.");
+        return;
+      }
+
+      slides.splice(currentSlideIndex, 1);
+      saveSlides();
+      
+      // Keep indexes within array boundary
+      if (currentSlideIndex >= slides.length) {
+        currentSlideIndex = slides.length - 1;
+      }
+
+      renderSlideList();
+      renderCurrentSlide();
+      populateEditorFields();
+      runDiagnostics();
+      showToast("Slayt başarıyla silindi!");
+    }
+  </script>
+</body>
+</html>
